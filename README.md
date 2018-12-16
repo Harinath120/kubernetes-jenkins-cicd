@@ -119,7 +119,7 @@ You will use a custom [values file](https://github.com/kubernetes/helm/blob/mast
 * Use the Helm CLI to deploy the chart with your configuration set.
 
 ```shell
-./helm install -n jenkinscicd stable/jenkins -f kubernetes-jenkins-cicd/jenkins/values.yaml --version 0.16.6 --wait
+./helm install -n cd stable/jenkins -f kubernetes-jenkins-cicd/jenkins/values.yaml --version 0.16.6 --wait
 ```
 
 * Once that command completes ensure the Jenkins pod goes to the `Running` state and the container is in the `READY` state:
@@ -127,13 +127,13 @@ You will use a custom [values file](https://github.com/kubernetes/helm/blob/mast
 ```shell
 kubectl get pods
 NAME                          READY     STATUS    RESTARTS   AGE
-jenkins-cd-85b6c95746-ng9jh   1/1       Running   0          3m
+cd-jenkins-85b6c95746-ng9jh   1/1       Running   0          3m
 ```
 
 * Run the following command to setup port forwarding to the Jenkins UI from the Cloud Shell
 
 ```shell
-export POD_NAME=$(kubectl get pods --namespace default -l "component=jenkinscicd-master" -o jsonpath="{.items[0].metadata.name}")
+export POD_NAME=$(kubectl get pods -l "component=cd-jenkins-master" -o jsonpath="{.items[0].metadata.name}")
 kubectl port-forward $POD_NAME 8080:8080 >> /dev/null &
 ```
 
@@ -141,10 +141,10 @@ kubectl port-forward $POD_NAME 8080:8080 >> /dev/null &
 
 ```shell
 kubectl get svc
-NAME               CLUSTER-IP     EXTERNAL-IP   PORT(S)     AGE
-jenkins-cd         10.35.249.67   <none>        8080/TCP    3h
-jenkins-cd-agent   10.35.248.1    <none>        50000/TCP   3h
-kubernetes         10.35.240.1    <none>        443/TCP     9h
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     AGE
+cd-jenkins         ClusterIP   10.35.246.103   <none>        8080/TCP    11m
+cd-jenkins-agent   ClusterIP   10.35.245.24    <none>        50000/TCP   11m
+kubernetes         ClusterIP   10.35.240.1     <none>        443/TCP     19m
 ```
 
 We are using the [Kubernetes Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Kubernetes+Plugin) so that our builder nodes will be automatically launched as necessary when the Jenkins master requests them.
@@ -158,7 +158,7 @@ Additionally the `jenkins-ui` services is exposed using a ClusterIP so that it i
 * The Jenkins chart will automatically create an admin password for you. To retrieve it, run:
 
 ```shell
-printf $(kubectl get secret jenkins-cd -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
+printf $(kubectl get secret cd-jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
 ```
 
 * To get to the Jenkins user interface, click on the Web Preview button in cloud shell, then click “Preview on port 8080”:
