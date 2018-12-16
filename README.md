@@ -109,7 +109,7 @@ You will use a custom [values file](https://github.com/kubernetes/helm/blob/mast
 * Use the Helm CLI to deploy the chart with your configuration set.
 
 ```shell
-./helm install -n cd stable/jenkins -f kubernetes-jenkins-cicd/jenkins/values.yaml --version 0.16.6 --wait
+./helm install -n jenkins-cd stable/jenkins -f kubernetes-jenkins-cicd/jenkins/values.yaml --version 0.16.6 --wait
 ```
 
 * Once that command completes ensure the Jenkins pod goes to the `Running` state and the container is in the `READY` state:
