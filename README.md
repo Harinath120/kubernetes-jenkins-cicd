@@ -67,10 +67,6 @@ gcloud container clusters create jenkins-cd \
 kubectl get nodes
 ```
 
-Once that operation completes download the credentials for your cluster using the [gcloud CLI](https://cloud.google.com/sdk/):
-```shell
-$ gcloud container clusters get-credentials jenkins-cd
-```
 ## Install Helm
 
 In this lab, you will use Helm to install Jenkins from the Charts repository. Helm is a package manager that makes it easy to configure and deploy Kubernetes applications.  Once you have Jenkins installed, you'll be able to set up your CI/CD pipleline.
@@ -91,7 +87,8 @@ cp linux-amd64/helm .
 * Add yourself as a cluster administrator in the cluster's RBAC so that you can give Jenkins permissions in the cluster:
     
 ```shell
-kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value account)
+kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin \
+        --user=$(gcloud config get-value account)
 ```
 
 * Grant Tiller, the server side of Helm, the cluster-admin role in your cluster:
