@@ -136,7 +136,7 @@ jenkins-cd-85b6c95746-ng9jh   1/1       Running   0          3m
 * Run the following command to setup port forwarding to the Jenkins UI from the Cloud Shell
 
 ```shell
-export POD_NAME=$(kubectl get pods -l "component=jenkins-cd-master" -o jsonpath="{.items[0].metadata.name}")
+export POD_NAME=$(kubectl get pods --namespace default -l "component=jenkinscicd-master" -o jsonpath="{.items[0].metadata.name}")
 kubectl port-forward $POD_NAME 8080:8080 >> /dev/null &
 ```
 
